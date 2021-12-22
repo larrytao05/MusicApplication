@@ -1,5 +1,6 @@
 import requests
 import csv
+import codecs
 
 CLIENT_ID = "7b9317210acf4470956359dee4b09397"
 CLIENT_SECRET = "0586e0cbe37f4655b96919fa84a75ed1"
@@ -25,21 +26,31 @@ headers = {
 BASE_URL = "https://api.spotify.com/v1/"
 
 # get tracks
-playlist_id = "0CvNL96KydqsQ4wUakBvob"
-SONGS_ENDPOINT = "playlists/" + playlist_id + "/tracks"
 
-request = requests.get(BASE_URL + SONGS_ENDPOINT, headers=headers).json()
-
+playlist_uri = input()
 SONGS = {}
-for i in range(len(request["items"])):
-    SONGS[request["items"][i]["track"]["name"]] = request["items"][i]["track"]["uri"][14:]
+
+while playlist_uri != "quit":
+    playlist_id = playlist_uri[34:56]
+    SONGS_ENDPOINT = "playlists/" + playlist_id + "/tracks"
+
+    request = requests.get(BASE_URL + SONGS_ENDPOINT, headers=headers).json()
+
+
+    for i in range(len(request["items"])):
+        SONGS[request["items"][i]["track"]["name"]] = request["items"][i]["track"]["uri"][14:]
+    playlist_uri = input()
+
+
+
+
 
 # track info
 
 ANALYSIS_ENDPOINT = "audio-analysis/"
 
 
-print(["name", "num_samples", "duration", "sample_md5", "offset_seconds", "window_seconds", "analysis_sample_rate", "analysis_channels", "end_of_fade_in", "start_of_fade_out", "loudness", "tempo", "tempo_confidence", "time_signature", "time_signature_confidence", "key", "key_confidence", "mode", "mode_confidence", "code_version", "echoprint_version", "synch_version", "rhythm_version"])
+print("name, num_samples, duration, sample_md5, offset_seconds, window_seconds, analysis_sample_rate, analysis_channels, end_of_fade_in, start_of_fade_out, loudness, tempo, tempo_confidence, time_signature, time_signature_confidence, key, key_confidence, mode, mode_confidence, code_version, echoprint_version, synch_version, rhythm_version")
 for song in SONGS:
 
     request = requests.get(BASE_URL + ANALYSIS_ENDPOINT + SONGS[song], headers=headers).json()
