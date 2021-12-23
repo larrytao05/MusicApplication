@@ -7,7 +7,8 @@ import csv
 import codecs
 
 def getSongData(SONGS, BASE_URL, ANALYSIS_ENDPOINT, headers):
-    with open("test.txt", "w", encoding="utf-8-sig") as f:
+    with open("test.csv", "w", encoding="utf-8-sig") as f:
+        writer = csv.writer(f)
         
         
 
@@ -21,8 +22,8 @@ def getSongData(SONGS, BASE_URL, ANALYSIS_ENDPOINT, headers):
             for item in request["track"]:
                 
                 if "string" not in item:
-                    data.append(str(request["track"][item]) + "\n")
-            f.write(data)
+                    data.append(str(request["track"][item]))
+            writer.writerow(data)
                     
             
             
